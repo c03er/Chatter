@@ -40,6 +40,7 @@ public class ChatClient {
     JTextArea messageArea = new JTextArea(8, 40);
     DefaultListModel<String> users = new DefaultListModel<String>();
     JList chatUsers = new JList(users);
+    
 
     /**
      * Constructs the client by laying out the GUI and registering a
@@ -86,12 +87,16 @@ public class ChatClient {
             		String users = "SELECTED,";
             		
             		for(int i=0; i < selectedUsers.size(); i++) {
-            			users += selectedUsers.get(i);
+            			users += selectedUsers.get(i) + ",";
             		}
             		
-            		users += "," + textField.getText();
+            		System.out.println(users);
+            		
+            		users +=  textField.getText();
             		out.println(users);
             		textField.setText("");
+            		
+            		System.out.println(users);
             	}
                 
             }

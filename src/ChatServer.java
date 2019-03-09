@@ -50,7 +50,8 @@ public class ChatServer {
     private static HashSet<PrintWriter> writers = new HashSet<PrintWriter>();
     
     /**
-     * The set of all the print writers and their names as a key value HashMap
+     * The set of all the print writers and their names as a key value HashMap. Used to send 
+     * messages to specific users.
      */
     private static HashMap<String, PrintWriter> writerNames = new HashMap<String, PrintWriter>();
     
@@ -166,6 +167,7 @@ public class ChatServer {
                     
                     // TODO: Add code to ensure the thread safety of the
                     // the shared variable 'names'
+                    // Here to ensure thread safety isNameTaken and addName methods are synchronized.
                     
                     if(!isNameTaken(name)) {
                     	addName(name);
@@ -209,12 +211,24 @@ public class ChatServer {
                      */
                     if(input.startsWith("SELECTED")) {
                     	
+                    	System.out.println("Message started with selected");
                     	String[] usernames = input.split(",");
                     	String message = usernames[usernames.length -1];
                     	usernames[usernames.length -1] = null;
                     	usernames[0] = null;
                     	
+                    	System.out.println("Message is: " + message);
+                    	
+                    	System.out.println("Usernames are");
+                    	
+                    	for(String name: usernames) {
+                    		System.out.println(name);
+                    	}
+                    	
                     	//get the print writer object for each of the names
+                    	//Empty the tempWriters hashmap
+                    	tempWriters.clear();
+                    	
                     	for(String name:usernames) {
                     		
                     		if(isNameTaken(name)) {
@@ -232,7 +246,7 @@ public class ChatServer {
                     else {
                     	
                     	/**
-                    	 * If the message is directed at a specific client using the 'name>>'
+                    	 * If the list box is not used and a  message is directed at a specific client using the 'name>>'
                     	 * notation direct it to intended user. Else broadcast the message
                     	 */
                     	if(input.contains(">>")) {
