@@ -40,6 +40,7 @@ public class ChatClient {
     JTextArea messageArea = new JTextArea(8, 40);
     DefaultListModel<String> users = new DefaultListModel<String>();
     JList chatUsers = new JList(users);
+    String selectedName = null;
     
 
     /**
@@ -73,7 +74,7 @@ public class ChatClient {
              * the text area in preparation for the next message.
              */
             public void actionPerformed(ActionEvent e) {
-            	
+            	       	
             	//Check whether any specific names has been selected in the list box
             	if(chatUsers.isSelectionEmpty()) {
             		out.println(textField.getText());
@@ -89,6 +90,13 @@ public class ChatClient {
             		for(int i=0; i < selectedUsers.size(); i++) {
             			users += selectedUsers.get(i) + ",";
             		}
+            		
+            		/**
+            		 * Add the clients name to selected names. So that client can also see the 
+            		 * message.
+            		 */
+            		
+            		users += selectedName + ",";
             		
             		System.out.println(users);
             		
@@ -120,11 +128,14 @@ public class ChatClient {
      * Prompt for and return the desired screen name.
      */
     private String getName() {
-        return JOptionPane.showInputDialog(
+    	
+    	//Keep the selected name saved for future use
+        selectedName = JOptionPane.showInputDialog(
             frame,
             "Choose a screen name:",
             "Screen name selection",
             JOptionPane.PLAIN_MESSAGE);
+        return selectedName;
     }
 
     /**
@@ -149,6 +160,7 @@ public class ChatClient {
                 out.println(getName());
             } else if (line.startsWith("NAMEACCEPTED")) {
                 textField.setEditable(true);
+                System.out.println("Selected name is : " + selectedName);
             } else if (line.startsWith("MESSAGE")) {
                 messageArea.append(line.substring(8) + "\n");
             } else if (line.startsWith("LIST,")) {
